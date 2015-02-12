@@ -38,63 +38,73 @@ namespace homework01
                 for (counter = 0; counter < lines.Length; counter++)
                 {
                     fileLine = lines[counter];
-                    string[] words = fileLine.Split(delimiter);
+                    string[] words = fileLine.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
 
-                    switch (words[0].ToUpper())
+                    if (words.Length == 0)
                     {
-                        case "[TARGET]":
-                            stringLength = lines[counter].Length;
-                            for (i = 0; i < stringLength; i++)
-                            {
-                                printChar = lines[counter][i];
-                                if (printChar == '[')
+                        file.WriteLine();
+                    }
+                    else
+                    {
+                        switch (words[0].ToUpper())
+                        {
+                            case "[TARGET]":
+                                stringLength = lines[counter].Length;
+                                for (i = 0; i < stringLength; i++)
                                 {
-                                    file.Write(printChar);
-                                } else if (i == 1)
+                                    printChar = lines[counter][i];
+                                    if (printChar == '[')
+                                    {
+                                        file.Write(printChar);
+                                    }
+                                    else if (i == 1)
+                                    {
+                                        firstChar = lines[counter][i];
+                                    }
+                                    else if (printChar == ']')
+                                    {
+                                        file.Write(firstChar);
+                                        file.WriteLine("ay]");
+                                    }
+                                    else
+                                    {
+                                        file.Write(printChar);
+                                    }
+                                }
+                                break;
+                            case "NAME":
+                                file.Write(words[0]);
+                                file.Write("=");
+                                stringLength = words[1].Length;
+                                firstChar = words[1][0];
+                                for (i = 0; i < stringLength; i++)
                                 {
-                                    firstChar = lines[counter][i];
-                                } else if (printChar == ']')
+                                    if (i == 0)
+                                    {
+                                        if (vowels.Contains(firstChar))
+                                        {
+                                            file.Write(firstChar);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        file.Write(words[1][i]);
+                                    }
+                                }
+                                if (vowels.Contains(firstChar))
                                 {
-                                    file.Write(firstChar);
-                                    file.WriteLine("ay]");
+                                    file.WriteLine("way");
                                 }
                                 else
                                 {
-                                    file.Write(printChar);
+                                    file.Write(firstChar);
+                                    file.WriteLine("ay");
                                 }
-                            }
-                            break;
-                        case "NAME":
-                            file.Write(words[0]);
-                            file.Write("=");
-                            stringLength = words[1].Length;
-                            firstChar = words[1][0];
-                            for (i = 0; i < stringLength; i++)
-                            {
-                                if (i == 0)
-                                {
-                                    if (vowels.Contains(firstChar))
-                                    {
-                                        file.Write(firstChar);
-                                    }
-                                } else
-                                {
-                                    file.Write(words[1][i]);
-                                }
-                            }
-                            if (vowels.Contains(firstChar))
-                            {
-                                file.WriteLine("way");
-                            }
-                            else
-                            {
-                                file.Write(firstChar);
-                                file.WriteLine("ay");
-                            }
-                            break;
-                        default:
-                            file.WriteLine(fileLine);
-                            break;
+                                break;
+                            default:
+                                file.WriteLine(fileLine);
+                                break;
+                        }
                     }
                 }
             }

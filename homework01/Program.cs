@@ -21,6 +21,8 @@ namespace homework01
                 Console.WriteLine("No file name entered.");
                 return;
             }
+
+            // initialize values
             string targetFile = @args[0];
             List<Target> TargetList = new List<Target>();
             INIReader reader;

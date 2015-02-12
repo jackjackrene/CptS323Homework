@@ -31,11 +31,13 @@ namespace homework01
             int FR = 0;
             int SR = 0;
             bool CSSWH = true;
+            int[] countFields = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             string fileLine;
             int counter = 1;
             string tab = "\t";
             char tabDelim = Convert.ToChar(tab);
             char[] delimiter = {'=', ' ', tabDelim};
+            int i = 0;
 
             // create list of targets
             List<Target> TargetList = new List<Target>();
@@ -47,47 +49,89 @@ namespace homework01
             for (counter = 1; counter < lines.Length; counter++)
             {
                 fileLine = lines[counter];
-                string[] words = fileLine.Split(delimiter);
+                string[] words = fileLine.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
 
-                switch (words[0].ToUpper())
+                if (words.Length > 2)
                 {
-                    case "NAME":
-                        Name = words[1];
-                        break;
-                    case "X":
-                        x = Convert.ToDouble(words[1]);
-                        break;
-                    case "Y":
-                        y = Convert.ToDouble(words[1]);
-                        break;
-                    case "Z":
-                        z = Convert.ToDouble(words[1]);
-                        break;
-                    case "FRIEND":
-                        Frd = Convert.ToBoolean(words[1]);
-                        break;
-                    case "POINTS":
-                        Pts = Convert.ToInt32(words[1]);
-                        break;
-                    case "FLASHRATE":
-                        FR = Convert.ToInt32(words[1]);
-                        break;
-                    case "SPAWNRATE":
-                        SR = Convert.ToInt32(words[1]);
-                        break;
-                    case "CANSWAPSIDESWHENHIT":
-                        CSSWH = Convert.ToBoolean(words[1]);
-                        break;
-                    case "[TARGET]":
-                        target = new Target(Name, x, y, z, Frd, Pts, FR, SR, CSSWH);
-                        TargetList.Add(target);
-                        break;
-                    default:
-                        break;
+                    if (words[2][0] != '#')
+                    {
+                        Console.WriteLine("Extra string is not a comment");
+                        Environment.Exit(0);
+                    }
+                }
+                if (words.Length > 0)
+                {
+                    switch (words[0].ToUpper())
+                    {
+                        case "NAME":
+                            Name = words[1];
+                            countFields[0]++;
+                            break;
+                        case "X":
+                            x = Convert.ToDouble(words[1]);
+                            countFields[1]++;
+                            break;
+                        case "Y":
+                            y = Convert.ToDouble(words[1]);
+                            countFields[2]++;
+                            break;
+                        case "Z":
+                            z = Convert.ToDouble(words[1]);
+                            countFields[3]++;
+                            break;
+                        case "FRIEND":
+                            Frd = Convert.ToBoolean(words[1]);
+                            countFields[4]++;
+                            break;
+                        case "POINTS":
+                            Pts = Convert.ToInt32(words[1]);
+                            countFields[5]++;
+                            break;
+                        case "FLASHRATE":
+                            FR = Convert.ToInt32(words[1]);
+                            countFields[6]++;
+                            break;
+                        case "SPAWNRATE":
+                            SR = Convert.ToInt32(words[1]);
+                            countFields[7]++;
+                            break;
+                        case "CANSWAPSIDESWHENHIT":
+                            CSSWH = Convert.ToBoolean(words[1]);
+                            countFields[8]++;
+                            break;
+                        case "[TARGET]":
+                            for (i = 0; i < countFields.Length; i++)
+                            {
+                                if (countFields[i] != 1)
+                                {
+                                    Console.WriteLine("Invalid number of target data fields");
+                                    Environment.Exit(0);
+                                }
+                                countFields[i] = 0;
+                            }
+                            target = new Target(Name, x, y, z, Frd, Pts, FR, SR, CSSWH);
+                            TargetList.Add(target);
+                            break;
+                        default:
+                            if (words[0][0] != '#')
+                            {
+                                Console.WriteLine("line is invalid - not a comment");
+                                Environment.Exit(0);
+                            }
+                            break;
+                    }
                 }
             }
 
             // add final target
+            for (i = 0; i < countFields.Length; i++)
+            {
+                if (countFields[i] != 1)
+                {
+                    Environment.Exit(0);
+                }
+                countFields[i] = 0;
+            }
             target = new Target(Name, x, y, z, Frd, Pts, FR, SR, CSSWH);
             TargetList.Add(target);
 
