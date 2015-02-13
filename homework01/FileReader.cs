@@ -55,8 +55,7 @@ namespace homework01
                 {
                     if (words[2][0] != '#')
                     {
-                        Console.WriteLine("Extra string is not a comment");
-                        Environment.Exit(0);
+                        throw new CommentException("Extra string is not a comment");
                     }
                 }
                 if (words.Length > 0)
@@ -104,8 +103,7 @@ namespace homework01
                             {
                                 if (countFields[i] != 1)
                                 {
-                                    Console.WriteLine("Invalid number of target data fields");
-                                    Environment.Exit(0);
+                                    throw new CommentException("Invalid number of target data fields");
                                 }
                                 countFields[i] = 0;
                             }
@@ -115,8 +113,7 @@ namespace homework01
                         default:
                             if (words[0][0] != '#')
                             {
-                                Console.WriteLine("line is invalid - not a comment");
-                                Environment.Exit(0);
+                                throw new CommentException("Extra string is not a comment");
                             }
                             break;
                     }
@@ -128,7 +125,7 @@ namespace homework01
             {
                 if (countFields[i] != 1)
                 {
-                    Environment.Exit(0);
+                    throw new CommentException("Invalid number of target fields");
                 }
                 countFields[i] = 0;
             }
